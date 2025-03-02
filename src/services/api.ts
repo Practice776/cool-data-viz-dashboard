@@ -61,6 +61,15 @@ export const authAPI = {
   }
 };
 
+// Helper to build URL params from filters
+const buildFilterParams = (filters: FilterParams = {}) => {
+  const params = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value) params.append(key, value);
+  });
+  return params.toString();
+};
+
 // Define types for dashboard data
 export type FilterParams = {
   end_year?: string;
@@ -122,53 +131,65 @@ export const dashboardAPI = {
     return response.data;
   },
   
-  filterData: async (filters: FilterParams) => {
-    const params = new URLSearchParams();
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) params.append(key, value);
-    });
-    
-    const response = await api.get(`/api/filter?${params.toString()}`);
+  filterData: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const response = await api.get(`/api/filter?${params}`);
     return response.data;
   },
   
-  getTopicDistribution: async () => {
-    const response = await api.get('/api/topic-distribution');
+  getTopicDistribution: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const url = `/api/topic-distribution${params ? `?${params}` : ''}`;
+    const response = await api.get(url);
     return response.data as TopicData[];
   },
   
-  getYearTrend: async () => {
-    const response = await api.get('/api/year-trend');
+  getYearTrend: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const url = `/api/year-trend${params ? `?${params}` : ''}`;
+    const response = await api.get(url);
     return response.data as YearData[];
   },
   
-  getCountryDistribution: async () => {
-    const response = await api.get('/api/country-distribution');
+  getCountryDistribution: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const url = `/api/country-distribution${params ? `?${params}` : ''}`;
+    const response = await api.get(url);
     return response.data as CountryData[];
   },
   
-  getIntensityDistribution: async () => {
-    const response = await api.get('/api/intensity-distribution');
+  getIntensityDistribution: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const url = `/api/intensity-distribution${params ? `?${params}` : ''}`;
+    const response = await api.get(url);
     return response.data as IntensityData[];
   },
   
-  getLikelihoodDistribution: async () => {
-    const response = await api.get('/api/likelihood-distribution');
+  getLikelihoodDistribution: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const url = `/api/likelihood-distribution${params ? `?${params}` : ''}`;
+    const response = await api.get(url);
     return response.data as LikelihoodData[];
   },
   
-  getRegionDistribution: async () => {
-    const response = await api.get('/api/region-distribution');
+  getRegionDistribution: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const url = `/api/region-distribution${params ? `?${params}` : ''}`;
+    const response = await api.get(url);
     return response.data as RegionData[];
   },
   
-  getRelevanceByTopic: async () => {
-    const response = await api.get('/api/relevance-chart');
+  getRelevanceByTopic: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const url = `/api/relevance-chart${params ? `?${params}` : ''}`;
+    const response = await api.get(url);
     return response.data as RelevanceData[];
   },
   
-  getSectorDistribution: async () => {
-    const response = await api.get('/api/sector-distribution');
+  getSectorDistribution: async (filters: FilterParams = {}) => {
+    const params = buildFilterParams(filters);
+    const url = `/api/sector-distribution${params ? `?${params}` : ''}`;
+    const response = await api.get(url);
     return response.data as SectorData[];
   }
 };

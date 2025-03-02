@@ -17,9 +17,14 @@ export function useDataFetching() {
     sectorDistribution: []
   });
 
-  const fetchAllData = useCallback(async () => {
+  // Function to fetch all dashboard data
+  const fetchAllData = useCallback(async (currentFilters: FilterParams = {}) => {
     setIsLoading(true);
     try {
+      // Use the API's filterData method to get filtered results
+      const filteredData = await dashboardAPI.filterData(currentFilters);
+      
+      // Now fetch all chart data with the applied filters
       const [
         topicDistribution,
         yearTrend,
@@ -30,14 +35,14 @@ export function useDataFetching() {
         relevanceByTopic,
         sectorDistribution
       ] = await Promise.all([
-        dashboardAPI.getTopicDistribution(),
-        dashboardAPI.getYearTrend(),
-        dashboardAPI.getCountryDistribution(),
-        dashboardAPI.getIntensityDistribution(),
-        dashboardAPI.getLikelihoodDistribution(),
-        dashboardAPI.getRegionDistribution(),
-        dashboardAPI.getRelevanceByTopic(),
-        dashboardAPI.getSectorDistribution()
+        dashboardAPI.getTopicDistribution(currentFilters),
+        dashboardAPI.getYearTrend(currentFilters),
+        dashboardAPI.getCountryDistribution(currentFilters),
+        dashboardAPI.getIntensityDistribution(currentFilters),
+        dashboardAPI.getLikelihoodDistribution(currentFilters),
+        dashboardAPI.getRegionDistribution(currentFilters),
+        dashboardAPI.getRelevanceByTopic(currentFilters),
+        dashboardAPI.getSectorDistribution(currentFilters)
       ]);
 
       setData({
@@ -50,6 +55,8 @@ export function useDataFetching() {
         relevanceByTopic,
         sectorDistribution
       });
+      
+      console.log('Data fetched with filters:', currentFilters);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
       toast.error('Failed to load dashboard data');
@@ -63,22 +70,30 @@ export function useDataFetching() {
     setFilters(newFilters);
     setIsLoading(true);
     try {
-      // In a real implementation, you would pass these filters to your API endpoints
-      // For now, we'll simulate by just refetching all data
-      await fetchAllData();
-      toast.success('Filters applied successfully');
+      // Fetch data with the new filters
+      await fetchAllData(newFilters);
+      
+      // Show a toast notification indicating which filters are applied
+      const filterNames = Object.entries(newFilters)
+        .filter(([_, value]) => value)
+        .map(([key, value]) => `${key.replace('_', ' ')}: ${value}`)
+        .join(', ');
+        
+      if (filterNames) {
+        toast.success(`Filters applied: ${filterNames}`);
+      } else {
+        toast.success('All filters cleared');
+      }
     } catch (error) {
       console.error('Error applying filters:', error);
       toast.error('Failed to apply filters');
-    } finally {
-      setIsLoading(false);
     }
   }, [fetchAllData]);
 
   // Reset all filters
   const resetFilters = useCallback(() => {
     setFilters({});
-    fetchAllData();
+    fetchAllData({});
     toast.success('Filters reset successfully');
   }, [fetchAllData]);
 

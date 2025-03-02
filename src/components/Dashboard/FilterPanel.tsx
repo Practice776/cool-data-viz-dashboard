@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react';
 import { FilterParams } from '@/services/api';
 import { motion } from 'framer-motion';
-import { FilterX, SlidersHorizontal } from 'lucide-react';
+import { FilterX, SlidersHorizontal, Search } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface FilterPanelProps {
   filters: FilterParams;
@@ -15,6 +16,7 @@ interface FilterPanelProps {
 const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelProps) => {
   const [localFilters, setLocalFilters] = useState<FilterParams>(filters);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Update local filters when props change
   useEffect(() => {
@@ -26,12 +28,17 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
   };
 
   const handleApplyFilters = () => {
-    onApplyFilters(localFilters);
+    // Include search term in topic filter if provided
+    if (searchTerm && searchTerm.trim() !== "") {
+      onApplyFilters({...localFilters, topic: searchTerm});
+    } else {
+      onApplyFilters(localFilters);
+    }
   };
 
   // Sample data for filter options (in a real app, these would come from your API)
   const years = ['2020', '2021', '2022', '2023', '2024'];
-  const topics = ['Technology', 'Economy', 'Politics', 'Environment', 'Healthcare', 'Education'];
+  const topics = ['Technology', 'Economy', 'Politics', 'Environment', 'Healthcare', 'Education', 'Oil', 'Energy', 'Gas'];
   const sectors = ['Energy', 'Finance', 'Manufacturing', 'Agriculture', 'Information Technology', 'Healthcare'];
   const regions = ['North America', 'Europe', 'Asia Pacific', 'Middle East', 'Africa', 'Latin America'];
   const pestles = ['Political', 'Economic', 'Social', 'Technological', 'Legal', 'Environmental'];
@@ -52,7 +59,17 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
             <SlidersHorizontal className="h-5 w-5 text-dashboard-primary mr-2" />
             <h2 className="text-lg font-semibold">Dashboard Filters</h2>
           </div>
-          <div>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Input
+                type="text"
+                placeholder="Search by topic (e.g., oil)"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8 w-64"
+              />
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+            </div>
             <Button
               variant="outline"
               size="sm"
@@ -227,20 +244,18 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
           </motion.div>
         )}
         
-        {isOpen && (
-          <motion.div 
-            className="mt-4 flex justify-end"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Button onClick={handleApplyFilters} className="bg-dashboard-primary hover:bg-dashboard-secondary">
-              Apply Filters
-            </Button>
-          </motion.div>
-        )}
+        <motion.div 
+          className="mt-4 flex justify-end"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Button onClick={handleApplyFilters} className="bg-dashboard-primary hover:bg-dashboard-secondary">
+            Apply Filters
+          </Button>
+        </motion.div>
         
-        {!isOpen && Object.values(filters).some(f => f) && (
+        {Object.values(filters).some(f => f) && (
           <motion.div 
             className="mt-2 flex flex-wrap gap-2"
             initial={{ opacity: 0 }}
@@ -250,7 +265,7 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
             {Object.entries(filters).map(([key, value]) => {
               if (!value) return null;
               return (
-                <div key={key} className="filter-chip active">
+                <div key={key} className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                   <span className="capitalize">{key.replace('_', ' ')}:</span> {value}
                 </div>
               );

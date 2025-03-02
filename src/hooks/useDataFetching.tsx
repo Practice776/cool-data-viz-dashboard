@@ -21,6 +21,8 @@ export function useDataFetching() {
   const fetchAllData = useCallback(async (currentFilters: FilterParams = {}) => {
     setIsLoading(true);
     try {
+      console.log('Fetching data with filters:', currentFilters);
+      
       // Use the API's filterData method to get filtered results
       const filteredData = await dashboardAPI.filterData(currentFilters);
       
@@ -67,14 +69,19 @@ export function useDataFetching() {
 
   // Apply filters
   const applyFilters = useCallback(async (newFilters: FilterParams) => {
-    setFilters(newFilters);
+    // Clean up filters by removing empty values
+    const cleanFilters = Object.fromEntries(
+      Object.entries(newFilters).filter(([_, value]) => value)
+    );
+    
+    setFilters(cleanFilters);
     setIsLoading(true);
     try {
       // Fetch data with the new filters
-      await fetchAllData(newFilters);
+      await fetchAllData(cleanFilters);
       
       // Show a toast notification indicating which filters are applied
-      const filterNames = Object.entries(newFilters)
+      const filterNames = Object.entries(cleanFilters)
         .filter(([_, value]) => value)
         .map(([key, value]) => `${key.replace('_', ' ')}: ${value}`)
         .join(', ');

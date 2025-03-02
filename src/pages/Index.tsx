@@ -130,7 +130,7 @@ const Index = () => {
           onResetFilters={resetFilters} 
         />
         
-        <ChartGrid data={data} isLoading={isLoading} />
+        <ChartGrid data={data} isLoading={isLoading} filters={filters} />
       </div>
     </div>
   );

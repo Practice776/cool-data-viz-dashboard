@@ -8,13 +8,15 @@ import RegionDistribution from './charts/RegionDistribution';
 import SectorDistribution from './charts/SectorDistribution';
 import RelevanceByTopic from './charts/RelevanceByTopic';
 import LikelihoodDistribution from './charts/LikelihoodDistribution';
+import { FilterParams } from '@/services/api';
 
 interface ChartGridProps {
   data: any;
   isLoading: boolean;
+  filters: FilterParams;
 }
 
-const ChartGrid = ({ data, isLoading }: ChartGridProps) => {
+const ChartGrid = ({ data, isLoading, filters }: ChartGridProps) => {
   if (isLoading) {
     return (
       <div className="container mx-auto max-w-7xl px-4 md:px-6 my-6">
@@ -34,6 +36,9 @@ const ChartGrid = ({ data, isLoading }: ChartGridProps) => {
     );
   }
 
+  // Check if we have any active filters to display
+  const hasFilters = Object.values(filters).some(filter => filter);
+
   return (
     <motion.div
       className="container mx-auto max-w-7xl px-4 md:px-6 my-6"
@@ -41,15 +46,29 @@ const ChartGrid = ({ data, isLoading }: ChartGridProps) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      {hasFilters && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-lg text-blue-800">
+          <h3 className="text-lg font-medium">Filtered Visualization</h3>
+          <p className="text-sm">
+            Showing results for: {
+              Object.entries(filters)
+                .filter(([_, value]) => value)
+                .map(([key, value]) => `${key.replace('_', ' ')}: ${value}`)
+                .join(', ')
+            }
+          </p>
+        </div>
+      )}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <YearlyTrend data={data.yearTrend} />
-        <TopicDistribution data={data.topicDistribution} />
-        <CountryDistribution data={data.countryDistribution} />
-        <RegionDistribution data={data.regionDistribution} />
+        <TopicDistribution data={data.topicDistribution} activeFilter={filters.topic || ""} />
+        <CountryDistribution data={data.countryDistribution} activeFilter={filters.country || ""} />
+        <RegionDistribution data={data.regionDistribution} activeFilter={filters.region || ""} />
         <IntensityDistribution data={data.intensityDistribution} />
         <LikelihoodDistribution data={data.likelihoodDistribution} />
-        <SectorDistribution data={data.sectorDistribution} />
-        <RelevanceByTopic data={data.relevanceByTopic} />
+        <SectorDistribution data={data.sectorDistribution} activeFilter={filters.sector || ""} />
+        <RelevanceByTopic data={data.relevanceByTopic} activeFilter={filters.topic || ""} />
       </div>
     </motion.div>
   );

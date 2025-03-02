@@ -108,7 +108,6 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
                   <SelectValue placeholder="Select year" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any</SelectItem>
                   {years.map(year => (
                     <SelectItem key={year} value={year}>{year}</SelectItem>
                   ))}
@@ -126,7 +125,6 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
                   <SelectValue placeholder="Select topic" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any</SelectItem>
                   {topics.map(topic => (
                     <SelectItem key={topic} value={topic}>{topic}</SelectItem>
                   ))}
@@ -144,7 +142,6 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
                   <SelectValue placeholder="Select sector" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any</SelectItem>
                   {sectors.map(sector => (
                     <SelectItem key={sector} value={sector}>{sector}</SelectItem>
                   ))}
@@ -162,7 +159,6 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
                   <SelectValue placeholder="Select region" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any</SelectItem>
                   {regions.map(region => (
                     <SelectItem key={region} value={region}>{region}</SelectItem>
                   ))}
@@ -180,7 +176,6 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
                   <SelectValue placeholder="Select PESTLE" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any</SelectItem>
                   {pestles.map(pestle => (
                     <SelectItem key={pestle} value={pestle}>{pestle}</SelectItem>
                   ))}
@@ -198,7 +193,6 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
                   <SelectValue placeholder="Select source" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any</SelectItem>
                   {sources.map(source => (
                     <SelectItem key={source} value={source}>{source}</SelectItem>
                   ))}
@@ -216,7 +210,6 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
                   <SelectValue placeholder="Select SWOT" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any</SelectItem>
                   {swots.map(swot => (
                     <SelectItem key={swot} value={swot}>{swot}</SelectItem>
                   ))}
@@ -234,7 +227,6 @@ const FilterPanel = ({ filters, onApplyFilters, onResetFilters }: FilterPanelPro
                   <SelectValue placeholder="Select country" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any</SelectItem>
                   {countries.map(country => (
                     <SelectItem key={country} value={country}>{country}</SelectItem>
                   ))}

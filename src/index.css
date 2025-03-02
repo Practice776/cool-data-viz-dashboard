@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,11 +16,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 255 60% 75%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 260 36% 54%;
+    --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -35,19 +38,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -95,7 +91,74 @@
     @apply border-border;
   }
 
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9b87f5;
+  }
+}
+
+@layer components {
+  .dashboard-chart {
+    @apply bg-white rounded-xl shadow-subtle p-4 transition-all duration-300 overflow-hidden;
+    @apply border border-gray-100 hover:shadow-glass hover:border-gray-200;
+    @apply flex flex-col h-full;
+  }
+
+  .dashboard-card {
+    @apply bg-white bg-opacity-70 backdrop-blur-sm rounded-xl shadow-glass;
+    @apply border border-gray-200 p-6 hover:shadow-elevated transition-all duration-300;
+  }
+
+  .filter-chip {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+    @apply bg-dashboard-lightgray text-dashboard-darkgray transition-all duration-200;
+    @apply hover:bg-dashboard-primary hover:text-white cursor-pointer;
+  }
+
+  .filter-chip.active {
+    @apply bg-dashboard-primary text-white;
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold text-dashboard-darkgray mb-4 mt-8;
+  }
+
+  .subtle-heading {
+    @apply text-sm uppercase tracking-wider text-dashboard-neutral font-medium mb-2;
+  }
+
+  .chart-title {
+    @apply font-semibold text-lg text-dashboard-darkgray mb-3;
+  }
+
+  .recharts-tooltip-wrapper {
+    @apply !shadow-glass !rounded-lg !border-gray-100 !border !backdrop-blur-sm;
   }
 }
